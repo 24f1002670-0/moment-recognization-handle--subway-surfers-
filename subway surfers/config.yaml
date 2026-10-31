@@ -1,0 +1,51 @@
+# ============================================================
+# motion_grid_control — configuration
+# Tune everything here without touching code.
+# ============================================================
+
+camera:
+  index: 0              # webcam index, try 1 or 2 if 0 is wrong device
+  width: 960
+  height: 540
+  mirror: true           # flip horizontally so movement feels natural (like a mirror)
+
+grid:
+  columns: 3              # LEFT / CENTER / RIGHT lanes
+  labels: ["LEFT", "CENTER", "RIGHT"]
+
+tracking:
+  # which landmark set to use as the tracked point (torso center is most stable)
+  landmark: "torso_center"
+  smoothing_window: 5              # moving-average window (frames) to reduce jitter
+  min_detection_confidence: 0.6
+  min_tracking_confidence: 0.6
+
+vertical:
+  jump_threshold_ratio: 0.12       # torso must rise this fraction of frame height above baseline
+  duck_threshold_ratio: 0.10       # torso must drop this fraction of frame height below baseline
+  cooldown_seconds: 0.5            # minimum time between two vertical events
+  auto_baseline_frames: 45         # frames used to auto-calibrate the "standing neutral" baseline
+  recalibrate_key: "c"             # press this key in the window to force re-calibration
+
+keys:
+  # Relative lane-shift keys — most runner games move ONE lane per press,
+  # wherever you currently are. There is no separate "center" key:
+  # returning to center from LEFT is a "right" press, and vice versa.
+  left: "left"
+  right: "right"
+  jump: "up"                       # change to "space" for many endless runners
+  duck: "down"
+  backend: "pyautogui"             # "pyautogui" (cross-platform) or "pydirectinput" (Windows games)
+
+controller:
+  enabled: true                    # set false to test tracking without sending key presses
+  key_press_seconds: 0.05
+  lane_cooldown_seconds: 0.25      # debounce for lane-change events
+  between_step_seconds: 0.12       # gap between repeated presses when skipping >1 lane at once
+
+overlay:
+  show_grid: true
+  show_landmark: true
+  show_log: true
+  log_max_lines: 6
+  window_name: "Motion Grid Control"
